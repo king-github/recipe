@@ -1,6 +1,6 @@
 package guru.spring.recipe.model;
 
-public enum Dificulty {
+public enum Difficulty {
 
     EASY, MODERATE, HARD;
 

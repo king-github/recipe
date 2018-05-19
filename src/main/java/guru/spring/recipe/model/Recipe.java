@@ -2,15 +2,19 @@ package guru.spring.recipe.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = {"id"})
 @Entity
 public class Recipe {
 
@@ -18,28 +22,44 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String description;
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
     private String source;
     private String url;
+
+    @Lob
     private String directions;
 
     @Enumerated(EnumType.STRING)
-    private Dificulty difficulty;
+    private Difficulty difficulty;
 
     @Lob
     private Byte[] image;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "recipe")
-    private List<Ingredient> ingredients;
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "recipe_category",
-               joinColumns = @JoinColumn(name = "rec_id"), inverseJoinColumns = @JoinColumn(name = "cat_id"))
-    private Set<Category> categories;
+               joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> categories = new HashSet<>();
 
+
+    public Recipe addIngredient(Ingredient ingredient) {
+
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+
+        return this;
+    }
+
+    public void setNotes(Notes notes) {
+        this.notes = notes;
+        notes.setRecipe(this);
+    }
 }
