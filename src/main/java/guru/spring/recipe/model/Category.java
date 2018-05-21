@@ -1,19 +1,17 @@
 package guru.spring.recipe.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "description"})
 @Entity
 public class Category {
 
@@ -25,13 +23,5 @@ public class Category {
 
     @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes = new HashSet<>();
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                '}';
-    }
 
 }

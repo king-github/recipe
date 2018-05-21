@@ -1,9 +1,6 @@
 package guru.spring.recipe.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,10 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "description", "description", "prepTime", "cookTime", "servings", "source", "url", "difficulty"})
 @Entity
 public class Recipe {
 
