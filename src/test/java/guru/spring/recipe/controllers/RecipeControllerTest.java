@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -20,9 +21,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-public class IndexControllerTest {
+public class RecipeControllerTest {
 
-    IndexController indexController;
+    RecipeController recipeController;
 
     @Mock
     RecipeService recipeService;
@@ -35,17 +36,17 @@ public class IndexControllerTest {
     public void setUp(){
 
         MockitoAnnotations.initMocks(this);
-        indexController = new IndexController(recipeService);
+        recipeController = new RecipeController(recipeService);
 
     }
 
     @Test
     public void testMockMVC() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/recipe"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                .andExpect(view().name("recipe/index"));
     }
 
     @Test
@@ -61,15 +62,44 @@ public class IndexControllerTest {
         ArgumentCaptor<List> listArgumentCaptor = ArgumentCaptor.forClass(List.class);
 
         // when
-        String indexPage = indexController.getIndexPage(model);
+        String indexPage = recipeController.getIndexPage(model);
 
         // then
-        assertEquals("index", indexPage);
+        assertEquals("recipe/index", indexPage);
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1))
                 .addAttribute(eq("recipes"), listArgumentCaptor.capture());
 
         List value = listArgumentCaptor.getValue();
         assertEquals(recipes, value);
+    }
+
+
+    @Test
+    public void getRecipe() throws Exception {
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1l);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        when(recipeService.getRecipeById(anyLong())).thenReturn(Optional.of(recipe));
+
+        mockMvc.perform(get("/recipe/show/1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/show"));
+
+    }
+
+    @Test
+    public void getRecipeWhenNoExist() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        when(recipeService.getRecipeById(anyLong())).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/recipe/show/1"))
+                .andExpect(status().isNotFound());
+
     }
 }

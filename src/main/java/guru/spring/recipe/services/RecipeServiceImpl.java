@@ -5,6 +5,7 @@ import guru.spring.recipe.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -19,6 +20,12 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Recipe> getRecipes(){
 
         return recipeRepository.findAll();
+    }
+
+    @Override
+    public Optional<Recipe> getRecipeById(Long id) {
+
+        return recipeRepository.findById(id);
     }
 
 }

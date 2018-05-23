@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Home</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" />
+
+    <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="/css/style.css" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title" th:text="${recipe.getDescription()}">Recipes</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Categories:</p>
+                        </div>
+                        <div class="col-md-9">
+                            <ul>
+                                <li th:each="category : ${recipe.getCategories()}" th:text="${category.getDescription()}">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Prep time:</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.getPrepTime() +' min'}">
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Difficulty:</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.getDifficulty()}">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Cook time:</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.getCookTime() +' min'}">
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Servings:</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.getServings()}">
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Source:</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p th:text="${recipe.getSource()}">
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-right font-weight-bold">
+                            <p>Url:</p>
+                        </div>
+                        <div class="col-md-3">
+                            <a th:text="Link" th:href="${recipe.getUrl()}">
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Ingredients!</h1>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive" th:if="${not #lists.isEmpty(recipe.getIngredients())}">
+                        <ul>
+                        <li th:each="ingredient : ${recipe.getIngredients()}" th:text="${ingredient.getAmount()} + ' '
+                                + ${ingredient.getUnitOfMesure().getUom()} +' of '
+                                + ${ingredient.getDescription()}
+                                "></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Directions</h1>
+                </div>
+                <div class="panel-body">
+                    <p th:text="${recipe.getDirections()}"></p>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h1 class="panel-title">Notes</h1>
+                </div>
+                <div class="panel-body">
+                    <p th:text="${recipe.getNotes().getRecipeNotes()}"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
