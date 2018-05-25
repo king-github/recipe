@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @EqualsAndHashCode(of = {"id"})
 @ToString(of = {"id", "uom"})
 @Entity
-public class UnitOfMesure {
+public class UnitOfMeasure {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

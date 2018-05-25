@@ -4,11 +4,10 @@ package guru.spring.recipe;
 import guru.spring.recipe.model.*;
 import guru.spring.recipe.repositories.CategoryRepository;
 import guru.spring.recipe.repositories.RecipeRepository;
-import guru.spring.recipe.repositories.UnitOfMesureRepository;
+import guru.spring.recipe.repositories.UnitOfMeasureRepository;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -21,25 +20,25 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
 
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
-    private final UnitOfMesureRepository unitOfMesureRepository;
+    private final UnitOfMeasureRepository unitOfMeasureRepository;
 
-    private Map<String, UnitOfMesure> uoms;
+    private Map<String, UnitOfMeasure> uoms;
     private Map<String, Category> categories;
 
     public RecipeBootsrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository,
-                          UnitOfMesureRepository unitOfMesureRepository) {
+                          UnitOfMeasureRepository unitOfMeasureRepository) {
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
-        this.unitOfMesureRepository = unitOfMesureRepository;
+        this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
 
-        uoms = unitOfMesureRepository.findAll()
+        uoms = unitOfMeasureRepository.findAll()
                                      .stream()
-                                     .collect(Collectors.toMap(UnitOfMesure::getUom,
+                                     .collect(Collectors.toMap(UnitOfMeasure::getUom,
                                                                Function.identity()));
 
         categories = categoryRepository.findAll()
@@ -170,8 +169,8 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
         return recipes;
     }
 
-    private UnitOfMesure getUom(String name) {
-        return Optional.ofNullable(uoms.get(name)).orElseThrow(() -> new RuntimeException("UnitOfMesure: "+name+" not found!"));
+    private UnitOfMeasure getUom(String name) {
+        return Optional.ofNullable(uoms.get(name)).orElseThrow(() -> new RuntimeException("UnitOfMeasure: "+name+" not found!"));
     }
 
     private Category getCategory(String name) {

@@ -94,7 +94,7 @@
                     <div class="table-responsive" th:if="${not #lists.isEmpty(recipe.getIngredients())}">
                         <ul>
                         <li th:each="ingredient : ${recipe.getIngredients()}" th:text="${ingredient.getAmount()} + ' '
-                                + ${ingredient.getUnitOfMesure().getUom()} +' of '
+                                + ${ingredient.getUnitOfMeasure().getUom()} +' of '
                                 + ${ingredient.getDescription()}
                                 "></li>
                         </ul>
