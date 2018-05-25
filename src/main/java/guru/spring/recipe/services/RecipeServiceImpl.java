@@ -61,4 +61,10 @@ public class RecipeServiceImpl implements RecipeService {
                             .orElseThrow(() -> new ResourceNotFoundExcception("Recipe not found")));
     }
 
+    @Override
+    public void deleteById(Long id) {
+
+        recipeRepository.deleteById(id);
+    }
+
 }
