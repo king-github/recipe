@@ -20,12 +20,11 @@ import java.util.Optional;
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
-    //IngredientRepository ingredientRepository;
-    RecipeRepository recipeRepository;
-    IngredientRepository ingredientRepository;
-    IngredientToIngredientCommand ingredientToIngredientCommand;
-    IngredientCommandToIngredient ingredientCommandToIngredient;
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    private RecipeRepository recipeRepository;
+    private IngredientRepository ingredientRepository;
+    private IngredientToIngredientCommand ingredientToIngredientCommand;
+    private IngredientCommandToIngredient ingredientCommandToIngredient;
+    private UnitOfMeasureRepository unitOfMeasureRepository;
 
     public IngredientServiceImpl(RecipeRepository recipeRepository,
                                  IngredientRepository ingredientRepository,
@@ -79,7 +78,7 @@ public class IngredientServiceImpl implements IngredientService {
         savedIngredient.setDescription(ingredientCommand.getDescription());
         savedIngredient.setUnitOfMeasure(uom);
 
-        Recipe savedRecipe = recipeRepository.save(recipe);
+        recipeRepository.save(recipe);
 
 
         IngredientCommand converted = ingredientToIngredientCommand.convert(savedIngredient);
@@ -90,5 +89,23 @@ public class IngredientServiceImpl implements IngredientService {
 
         return converted;
     }
+
+
+    @Override
+    public void deleteIngredient(Long recipeId, Long id) {
+
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(ResourceNotFoundExcception.of("Recipe"));
+
+        Ingredient ingredient = recipe.getIngredients().stream()
+                .filter(i -> i.getId().equals(id))
+                .findFirst().orElseThrow(ResourceNotFoundExcception.of("Ingredient"))
+                ;
+
+        recipe.getIngredients().remove(ingredient);
+
+        recipeRepository.save(recipe);
+    }
+
 
 }
