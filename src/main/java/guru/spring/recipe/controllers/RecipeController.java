@@ -22,7 +22,6 @@ public class RecipeController {
     @GetMapping("")
     public String getIndexPage(Model model) {
 
-        System.out.println("### Index page");
         log.info("### Index page");
 
         model.addAttribute("recipes", recipeService.getRecipes());
@@ -33,7 +32,6 @@ public class RecipeController {
     @GetMapping("/{id}/show")
     public String showRecipePage(@PathVariable Long id, Model model) {
 
-        System.out.println("### Show recipe page");
         log.info("### Show recipe page");
 
         model.addAttribute("recipe", recipeService.getRecipeById(id));

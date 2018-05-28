@@ -2,11 +2,14 @@ package guru.spring.recipe.services;
 
 import guru.spring.recipe.commands.IngredientCommand;
 import guru.spring.recipe.controllers.ResourceNotFoundExcception;
+import guru.spring.recipe.converters.IngredientCommandToIngredient;
 import guru.spring.recipe.converters.IngredientToIngredientCommand;
 import guru.spring.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import guru.spring.recipe.model.Ingredient;
 import guru.spring.recipe.model.Recipe;
+import guru.spring.recipe.repositories.IngredientRepository;
 import guru.spring.recipe.repositories.RecipeRepository;
+import guru.spring.recipe.repositories.UnitOfMeasureRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,6 +28,13 @@ public class IngredientServiceImplTest {
     @Mock
     private RecipeRepository recipeRepository;
 
+    @Mock
+    private IngredientRepository ingredientRepository;
+
+    @Mock
+    private UnitOfMeasureRepository unitOfMeasureRepository;
+
+    private IngredientCommandToIngredient ingredientCommandToIngredient;
     private IngredientToIngredientCommand ingredientToIngredientCommand;
 
     @Before
@@ -32,7 +42,8 @@ public class IngredientServiceImplTest {
 
         MockitoAnnotations.initMocks(this);
         ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
-        ingredientService = new IngredientServiceImpl(recipeRepository, ingredientToIngredientCommand);
+        ingredientService = new IngredientServiceImpl(recipeRepository, ingredientRepository,
+                ingredientToIngredientCommand, ingredientCommandToIngredient, unitOfMeasureRepository);
 
         Ingredient ingredient1 = new Ingredient();
         ingredient1.setId(1L);
