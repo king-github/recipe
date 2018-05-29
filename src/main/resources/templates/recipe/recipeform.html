@@ -30,7 +30,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-3 form-group">
+                                <div class="col-md-12 form-group">
                                     <label>Recipe Description:</label>
                                     <input type="text" class="form-control" th:field="*{description}"/>
                                 </div>
@@ -40,10 +40,15 @@
                                     <label>Categories:</label>
                                 </div>
                                 <div class="col-md-9 form-group">
+
                                     <div class="radio">
-                                        <label>
-                                            <input type="checkbox" value=""/>
-                                            Cat 1
+                                        <label th:each="category : ${categories}">
+                                            <input type="checkbox" value="" th:name="categories.id"
+                                                   th:value="${category.id}"
+                                                   th:text="${category.description}"
+                                                   th:checked="${recipe.categories.contains(category)}"
+                                            />
+
                                         </label>
                                     </div>
                                     <div class="radio" th:remove="all">
@@ -65,10 +70,12 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <!--/*@thymesVar id="difficulty" type="guru.spring.recipe.model.Difficulty"*/-->
+                                        <option th:each="difficultyValue : ${T(guru.spring.recipe.model.Difficulty).values()}"
+                                                th:value="${difficultyValue.name()}"
+                                                th:text="${difficultyValue.name()}">
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -91,11 +98,11 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="row">
-                                <div class="col-md-11 ">
+                                <div class="col-md-10 ">
                                     <h1 class="panel-title">Ingredients</h1>
                                 </div>
-                                <div class="col-md-1">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
+                                <div class="col-md-2">
+                                    <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}"  role="button">Edit</a>
                                 </div>
                             </div>
                         </div>

@@ -39,7 +39,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe getRecipeById(Long id) {
 
         return recipeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundExcception("Recipe not found"));
+                .orElseThrow(ResourceNotFoundExcception.of("Recipe"));
     }
 
     @Override
@@ -51,6 +51,8 @@ public class RecipeServiceImpl implements RecipeService {
 
         log.info("### Saved recipe id: " + savedRecipe.getId());
 
+        System.out.println("### "+recipeCommand.getCategories());
+
         return recipeToRecipeCommand.convert(savedRecipe);
     }
 
@@ -58,7 +60,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeCommand findCommandById(Long id) {
 
         return recipeToRecipeCommand.convert(recipeRepository.findById(id)
-                            .orElseThrow(() -> new ResourceNotFoundExcception("Recipe not found")));
+                .orElseThrow(ResourceNotFoundExcception.of("Recipe")));
     }
 
     @Override

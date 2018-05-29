@@ -3,7 +3,6 @@ package guru.spring.recipe.controllers;
 import guru.spring.recipe.commands.IngredientCommand;
 import guru.spring.recipe.commands.RecipeCommand;
 import guru.spring.recipe.commands.UnitOfMeasureCommand;
-import guru.spring.recipe.model.Recipe;
 import guru.spring.recipe.services.IngredientService;
 import guru.spring.recipe.services.RecipeService;
 import guru.spring.recipe.services.UnitOfMeasureService;

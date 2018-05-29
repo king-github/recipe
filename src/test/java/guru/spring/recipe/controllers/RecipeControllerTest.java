@@ -2,6 +2,7 @@ package guru.spring.recipe.controllers;
 
 import guru.spring.recipe.commands.RecipeCommand;
 import guru.spring.recipe.model.Recipe;
+import guru.spring.recipe.services.CategoryService;
 import guru.spring.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,9 @@ public class RecipeControllerTest {
     RecipeService recipeService;
 
     @Mock
+    CategoryService categoryService;
+
+    @Mock
     Model model;
     private MockMvc mockMvc;
 
@@ -40,7 +44,7 @@ public class RecipeControllerTest {
     public void setUp(){
 
         MockitoAnnotations.initMocks(this);
-        recipeController = new RecipeController(recipeService);
+        recipeController = new RecipeController(recipeService, categoryService);
         mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
     }
@@ -111,7 +115,8 @@ public class RecipeControllerTest {
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
-                .andExpect(model().attributeExists("recipe"));
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(model().attributeExists("categories"));
     }
 
     @Test
@@ -140,6 +145,7 @@ public class RecipeControllerTest {
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
-                .andExpect(model().attributeExists("recipe"));
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(model().attributeExists("categories"));
     }
 }

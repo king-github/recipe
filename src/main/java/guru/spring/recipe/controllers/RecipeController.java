@@ -1,6 +1,7 @@
 package guru.spring.recipe.controllers;
 
 import guru.spring.recipe.commands.RecipeCommand;
+import guru.spring.recipe.services.CategoryService;
 import guru.spring.recipe.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class RecipeController {
 
     private RecipeService recipeService;
+    private CategoryService categoryService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, CategoryService categoryService) {
         this.recipeService = recipeService;
+        this.categoryService = categoryService;
     }
-
 
     @GetMapping("")
     public String getIndexPage(Model model) {
@@ -42,6 +44,7 @@ public class RecipeController {
     @GetMapping("/new")
     public String newRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
+        model.addAttribute("categories", categoryService.getAllCategoryCommand());
 
         return "recipe/recipeform";
     }
@@ -49,6 +52,7 @@ public class RecipeController {
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable Long id, Model model){
         model.addAttribute("recipe", recipeService.findCommandById(id));
+        model.addAttribute("categories", categoryService.getAllCategoryCommand());
 
         return "recipe/recipeform";
     }
