@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.function.Supplier;
 
 @ResponseStatus(value=HttpStatus.NOT_FOUND)
-public class ResourceNotFoundExcception extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
     private static final String NOT_FOUND = " not found";
 
-    public ResourceNotFoundExcception(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 
-    public static Supplier<ResourceNotFoundExcception> of (String resourceName){
+    public static Supplier<ResourceNotFoundException> of (String resourceName){
 
         StackTraceElement invokedClass = Thread.currentThread().getStackTrace()[2];
         org.slf4j.Logger log = LoggerFactory.getLogger(invokedClass.getClassName());
@@ -23,7 +23,7 @@ public class ResourceNotFoundExcception extends RuntimeException {
         return () -> {
             String message = resourceName + NOT_FOUND;
             log.info(message);
-            return new ResourceNotFoundExcception(message);
+            return new ResourceNotFoundException(message);
         };
     }
 }

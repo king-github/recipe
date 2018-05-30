@@ -5,11 +5,17 @@ import guru.spring.recipe.model.*;
 import guru.spring.recipe.repositories.CategoryRepository;
 import guru.spring.recipe.repositories.RecipeRepository;
 import guru.spring.recipe.repositories.UnitOfMeasureRepository;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 import java.util.function.Function;
@@ -45,6 +51,7 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
                                        .stream()
                                        .collect(Collectors.toMap(Category::getDescription,
                                                                  Function.identity()));
+
 
         recipeRepository.saveAll(getRecipes());
     }
@@ -100,6 +107,9 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
             .addIngredient(new Ingredient("Cilantro", new BigDecimal(2), getUom("Tablespoon")))
             .addIngredient(new Ingredient("freshly grated black pepper", new BigDecimal(2), getUom("Dash")))
             .addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), getUom("Each")));
+
+
+        guacRecipe.setImage(loadImage("/static/images/guacamole400x400.jpg"));
 
         recipes.add(guacRecipe);
 
@@ -164,6 +174,8 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
         tacosRecipe.getCategories().add(getCategory("American"));
         tacosRecipe.getCategories().add(getCategory("Fast Food"));
 
+        tacosRecipe.setImage(loadImage("/static/images/tacos400x400.jpg"));
+
         recipes.add(tacosRecipe);
 
         return recipes;
@@ -175,5 +187,14 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
 
     private Category getCategory(String name) {
         return Optional.ofNullable(categories.get(name)).orElseThrow(() -> new RuntimeException("Category: "+name+" not found!"));
+    }
+
+    private byte[] loadImage(String filename) {
+        try {
+            System.out.println("### " + filename);
+            return Files.readAllBytes(new ClassPathResource(filename).getFile().toPath());
+        } catch (IOException e) {
+            throw new RuntimeException("No image file: " + filename);
+        }
     }
 }

@@ -2,39 +2,30 @@ package guru.spring.recipe.controllers;
 
 import guru.spring.recipe.commands.RecipeCommand;
 import guru.spring.recipe.model.Recipe;
-import guru.spring.recipe.services.CategoryService;
 import guru.spring.recipe.services.ImageService;
 import guru.spring.recipe.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.ui.Model;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ImageControllerTest {
 
-    ImageController imageController;
+    @Mock
+    private RecipeService recipeService;
 
     @Mock
-    RecipeService recipeService;
-
-    @Mock
-    ImageService imageService;
+    private ImageService imageService;
 
 
     private MockMvc mockMvc;
@@ -43,6 +34,7 @@ public class ImageControllerTest {
     @Before
     public void setUp(){
 
+        ImageController imageController;
         MockitoAnnotations.initMocks(this);
         imageController = new ImageController(imageService, recipeService);
         mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
@@ -77,4 +69,35 @@ public class ImageControllerTest {
 
         verify(imageService, times(1)).saveImageFile(anyLong(), any());
     }
+
+    @Test
+    public void renderImageFromDb() throws Exception {
+
+        //given
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        String s = "fake image text";
+        byte[] bytesBoxed = new byte[s.getBytes().length];
+
+        int i = 0;
+
+        for (byte primByte : s.getBytes()){
+            bytesBoxed[i++] = primByte;
+        }
+
+        recipe.setImage(bytesBoxed);
+
+        when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
+
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        byte[] responseBytes = response.getContentAsByteArray();
+
+        assertEquals(s.getBytes().length, responseBytes.length);
+    }
+
 }

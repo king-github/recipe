@@ -39,7 +39,7 @@
                                 <div class="col-md-3 form-group">
                                     <label>Categories:</label>
                                 </div>
-                                <div class="col-md-9 form-group">
+                                <div class="col-md-3 form-group">
 
                                     <div class="radio">
                                         <label th:each="category : ${categories}">
@@ -51,12 +51,10 @@
 
                                         </label>
                                     </div>
-                                    <div class="radio" th:remove="all">
-                                        <label>
-                                            <input type="checkbox" value=""/>
-                                            Cat 2
-                                        </label>
-                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <img class="col-md-12" th:src="@{'/recipe/{id}/recipeimage'(id=${recipe.id})}"/>
+                                    <a class="btn btn-default" href="#" th:href="@{'/recipe/{id}/image'(id=${recipe.id})}"  role="button">Edit image</a>
                                 </div>
                             </div>
                             <div class="row">

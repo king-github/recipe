@@ -1,7 +1,7 @@
 package guru.spring.recipe.services;
 
 import guru.spring.recipe.commands.RecipeCommand;
-import guru.spring.recipe.controllers.ResourceNotFoundExcception;
+import guru.spring.recipe.controllers.ResourceNotFoundException;
 import guru.spring.recipe.converters.RecipeCommandToRecipe;
 import guru.spring.recipe.converters.RecipeToRecipeCommand;
 import guru.spring.recipe.model.Recipe;
@@ -11,11 +11,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 
 @Service
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
+
+    private static final Supplier<ResourceNotFoundException> RECIPE_NOT_FOUND_EXCEPTION
+            = ResourceNotFoundException.of("Recipe");
 
     private RecipeRepository recipeRepository;
     private RecipeCommandToRecipe recipeCommandToRecipe;
@@ -39,7 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe getRecipeById(Long id) {
 
         return recipeRepository.findById(id)
-                .orElseThrow(ResourceNotFoundExcception.of("Recipe"));
+                .orElseThrow(RECIPE_NOT_FOUND_EXCEPTION);
     }
 
     @Override
@@ -60,7 +64,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipeCommand findCommandById(Long id) {
 
         return recipeToRecipeCommand.convert(recipeRepository.findById(id)
-                .orElseThrow(ResourceNotFoundExcception.of("Recipe")));
+                .orElseThrow(RECIPE_NOT_FOUND_EXCEPTION));
     }
 
     @Override

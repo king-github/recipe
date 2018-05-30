@@ -1,7 +1,7 @@
 package guru.spring.recipe.services;
 
 import guru.spring.recipe.commands.IngredientCommand;
-import guru.spring.recipe.controllers.ResourceNotFoundExcception;
+import guru.spring.recipe.controllers.ResourceNotFoundException;
 import guru.spring.recipe.converters.IngredientCommandToIngredient;
 import guru.spring.recipe.converters.IngredientToIngredientCommand;
 
@@ -15,10 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Slf4j
 @Service
 public class IngredientServiceImpl implements IngredientService {
+
+    private static final Supplier<ResourceNotFoundException> RECIPE_NOT_FOUND_EXCEPTION
+            = ResourceNotFoundException.of("Recipe");
+
+    private static final Supplier<ResourceNotFoundException> INGREDIENT_NOT_FOUND_EXCEPTION
+            = ResourceNotFoundException.of("Ingredient");
+
+    private static final Supplier<ResourceNotFoundException> UOM_NOT_FOUND_EXCEPTION
+            = ResourceNotFoundException.of("Unit of measure");
+
 
     private RecipeRepository recipeRepository;
     private IngredientRepository ingredientRepository;
@@ -41,9 +52,9 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientCommand findByRecipeAndId(Long idRecipe, Long id) {
 
         IngredientCommand ingredientCommand = ingredientToIngredientCommand.convert(
-                recipeRepository.findById(idRecipe).orElseThrow(ResourceNotFoundExcception.of("Recipe"))
+                recipeRepository.findById(idRecipe).orElseThrow(RECIPE_NOT_FOUND_EXCEPTION)
                 .getIngredients().stream().filter(ingredient -> ingredient.getId().equals(id))
-                .findFirst().orElseThrow(ResourceNotFoundExcception.of("Ingredient")));
+                .findFirst().orElseThrow(INGREDIENT_NOT_FOUND_EXCEPTION));
 
         ingredientCommand.setRecipeId(idRecipe);
         return ingredientCommand;
@@ -55,7 +66,7 @@ public class IngredientServiceImpl implements IngredientService {
         log.debug("### "+ ingredientCommand.getRecipeId());
 
         Recipe recipe = recipeRepository.findById(ingredientCommand.getRecipeId())
-                .orElseThrow(ResourceNotFoundExcception.of("Recipe"));
+                .orElseThrow(RECIPE_NOT_FOUND_EXCEPTION);
 
         Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
@@ -71,7 +82,7 @@ public class IngredientServiceImpl implements IngredientService {
 
 
         UnitOfMeasure uom = unitOfMeasureRepository.findById(ingredientCommand.getUnitOfMeasure().getId())
-                .orElseThrow(ResourceNotFoundExcception.of("UnitOfMeasure"));
+                .orElseThrow(UOM_NOT_FOUND_EXCEPTION);
 
 
         savedIngredient.setAmount(ingredientCommand.getAmount());
@@ -95,11 +106,11 @@ public class IngredientServiceImpl implements IngredientService {
     public void deleteIngredient(Long recipeId, Long id) {
 
         Recipe recipe = recipeRepository.findById(recipeId)
-                .orElseThrow(ResourceNotFoundExcception.of("Recipe"));
+                .orElseThrow(RECIPE_NOT_FOUND_EXCEPTION);
 
         Ingredient ingredient = recipe.getIngredients().stream()
                 .filter(i -> i.getId().equals(id))
-                .findFirst().orElseThrow(ResourceNotFoundExcception.of("Ingredient"))
+                .findFirst().orElseThrow(INGREDIENT_NOT_FOUND_EXCEPTION)
                 ;
 
         recipe.getIngredients().remove(ingredient);

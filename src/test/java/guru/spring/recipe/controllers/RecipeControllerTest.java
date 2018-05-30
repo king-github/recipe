@@ -101,7 +101,7 @@ public class RecipeControllerTest {
     @Test
     public void getRecipeWhenNoExist() throws Exception {
 
-        when(recipeService.getRecipeById(anyLong())).thenThrow(new ResourceNotFoundExcception(""));
+        when(recipeService.getRecipeById(anyLong())).thenThrow(new ResourceNotFoundException(""));
 
         mockMvc.perform(get("/recipe/show/1"))
                 .andExpect(status().isNotFound());

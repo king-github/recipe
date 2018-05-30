@@ -1,7 +1,7 @@
 package guru.spring.recipe.services;
 
 import guru.spring.recipe.commands.IngredientCommand;
-import guru.spring.recipe.controllers.ResourceNotFoundExcception;
+import guru.spring.recipe.controllers.ResourceNotFoundException;
 import guru.spring.recipe.converters.IngredientCommandToIngredient;
 import guru.spring.recipe.converters.IngredientToIngredientCommand;
 import guru.spring.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
@@ -71,13 +71,13 @@ public class IngredientServiceImplTest {
         assertEquals(Long.valueOf(1L), ingredientCommand.getRecipeId());
     }
 
-    @Test(expected = ResourceNotFoundExcception.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void throw404WhenNotFoundIngredient() {
 
         ingredientService.findByRecipeAndId(1L, 333L);
     }
 
-    @Test(expected = ResourceNotFoundExcception.class)
+    @Test(expected = ResourceNotFoundException.class)
     public void throw404WhenNotFoundReceipe() {
 
         ingredientService.findByRecipeAndId(333L, 1L);
