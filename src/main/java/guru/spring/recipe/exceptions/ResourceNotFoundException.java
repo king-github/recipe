@@ -1,4 +1,4 @@
-package guru.spring.recipe.controllers;
+package guru.spring.recipe.exceptions;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

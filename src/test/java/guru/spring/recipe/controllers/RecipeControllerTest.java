@@ -1,6 +1,8 @@
 package guru.spring.recipe.controllers;
 
 import guru.spring.recipe.commands.RecipeCommand;
+import guru.spring.recipe.exceptions.GlobalControllerExceptionHandler;
+import guru.spring.recipe.exceptions.ResourceNotFoundException;
 import guru.spring.recipe.model.Recipe;
 import guru.spring.recipe.services.CategoryService;
 import guru.spring.recipe.services.RecipeService;
@@ -45,7 +47,9 @@ public class RecipeControllerTest {
 
         MockitoAnnotations.initMocks(this);
         recipeController = new RecipeController(recipeService, categoryService);
-        mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
+                .setControllerAdvice(new GlobalControllerExceptionHandler())
+                .build();
 
     }
 
@@ -103,9 +107,9 @@ public class RecipeControllerTest {
 
         when(recipeService.getRecipeById(anyLong())).thenThrow(new ResourceNotFoundException(""));
 
-        mockMvc.perform(get("/recipe/show/1"))
-                .andExpect(status().isNotFound());
-
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error/resource404"));
     }
 
     @Test

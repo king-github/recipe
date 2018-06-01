@@ -1,7 +1,7 @@
 package guru.spring.recipe.services;
 
 import guru.spring.recipe.commands.RecipeCommand;
-import guru.spring.recipe.controllers.ResourceNotFoundException;
+import guru.spring.recipe.exceptions.ResourceNotFoundException;
 import guru.spring.recipe.converters.RecipeCommandToRecipe;
 import guru.spring.recipe.converters.RecipeToRecipeCommand;
 import guru.spring.recipe.model.Recipe;

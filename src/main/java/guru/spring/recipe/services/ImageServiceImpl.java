@@ -1,6 +1,6 @@
 package guru.spring.recipe.services;
 
-import guru.spring.recipe.controllers.ResourceNotFoundException;
+import guru.spring.recipe.exceptions.ResourceNotFoundException;
 import guru.spring.recipe.model.Recipe;
 import guru.spring.recipe.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
@@ -28,17 +28,12 @@ public class ImageServiceImpl implements ImageService {
                 .orElseThrow(RECIPE_NOT_FOUND_EXCEPTION);
 
         try {
-            byte[] image = new byte[file.getBytes().length];
-            int i = 0;
-            for(byte b : file.getBytes()) {
-                image[i++] = b;
-            }
-            recipe.setImage(image);
-            recipeRepository.save(recipe);
-
+            recipe.setImage(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        recipeRepository.save(recipe);
+
 
     }
 
