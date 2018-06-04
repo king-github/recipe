@@ -1,16 +1,18 @@
 package guru.spring.recipe.commands;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class NotesCommand {
+@EqualsAndHashCode(of = "id")
+public class ImageCommand {
 
     private Long id;
-    private String description;
+    private byte[] imageData;
+    private RecipeCommand recipeCommand;
 
 }

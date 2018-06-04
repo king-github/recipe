@@ -1,5 +1,6 @@
 package guru.spring.recipe.services;
 
+import guru.spring.recipe.model.Image;
 import guru.spring.recipe.model.Recipe;
 import guru.spring.recipe.repositories.RecipeRepository;
 import org.junit.Before;
@@ -40,6 +41,7 @@ public class ImageServiceImplTest {
 
         Recipe recipe = new Recipe();
         recipe.setId(1L);
+        recipe.setImage(new Image());
 
         when(recipeRepository.findById(anyLong())).thenReturn(java.util.Optional.ofNullable(recipe));
 
@@ -51,7 +53,7 @@ public class ImageServiceImplTest {
         // then
         verify(recipeRepository, times(1)).save(argumentCaptor.capture());
         Recipe savedRecipe = argumentCaptor.getValue();
-        assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
+        assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().getImageData().length);
 
     }
 }

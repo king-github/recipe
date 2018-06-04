@@ -4,12 +4,16 @@ import guru.spring.recipe.commands.RecipeCommand;
 import guru.spring.recipe.exceptions.ResourceNotFoundException;
 import guru.spring.recipe.converters.RecipeCommandToRecipe;
 import guru.spring.recipe.converters.RecipeToRecipeCommand;
+import guru.spring.recipe.model.Notes;
 import guru.spring.recipe.model.Recipe;
+import guru.spring.recipe.repositories.NotesRepository;
 import guru.spring.recipe.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -20,6 +24,9 @@ public class RecipeServiceImpl implements RecipeService {
 
     private static final Supplier<ResourceNotFoundException> RECIPE_NOT_FOUND_EXCEPTION
             = ResourceNotFoundException.of("Recipe");
+
+    @Autowired
+    private NotesRepository notesRepository;
 
     private RecipeRepository recipeRepository;
     private RecipeCommandToRecipe recipeCommandToRecipe;
@@ -50,12 +57,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public RecipeCommand save(RecipeCommand recipeCommand) {
 
+        System.out.println("##### cat ");
+        recipeCommand.getCheckedCategories().forEach(System.out::println);
+
         Recipe recipe = recipeCommandToRecipe.convert(recipeCommand);
         Recipe savedRecipe = recipeRepository.save(recipe);
 
         log.info("### Saved recipe id: " + savedRecipe.getId());
-
-        System.out.println("### "+recipeCommand.getCategories());
 
         return recipeToRecipeCommand.convert(savedRecipe);
     }

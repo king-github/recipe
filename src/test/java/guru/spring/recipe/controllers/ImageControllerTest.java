@@ -1,6 +1,7 @@
 package guru.spring.recipe.controllers;
 
 import guru.spring.recipe.commands.RecipeCommand;
+import guru.spring.recipe.model.Image;
 import guru.spring.recipe.model.Recipe;
 import guru.spring.recipe.services.ImageService;
 import guru.spring.recipe.services.RecipeService;
@@ -86,7 +87,10 @@ public class ImageControllerTest {
             bytesBoxed[i++] = primByte;
         }
 
-        recipe.setImage(bytesBoxed);
+        Image image = new Image();
+        image.setImageData(bytesBoxed);
+
+        recipe.setImage(image);
 
         when(recipeService.getRecipeById(anyLong())).thenReturn(recipe);
 

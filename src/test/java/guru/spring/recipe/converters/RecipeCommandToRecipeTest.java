@@ -4,12 +4,20 @@ import guru.spring.recipe.commands.CategoryCommand;
 import guru.spring.recipe.commands.IngredientCommand;
 import guru.spring.recipe.commands.NotesCommand;
 import guru.spring.recipe.commands.RecipeCommand;
+import guru.spring.recipe.model.Category;
 import guru.spring.recipe.model.Difficulty;
 import guru.spring.recipe.model.Recipe;
+import guru.spring.recipe.services.CategoryService;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.HashSet;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 public class RecipeCommandToRecipeTest {
     public static final Long RECIPE_ID = 1L;
@@ -29,14 +37,29 @@ public class RecipeCommandToRecipeTest {
 
     RecipeCommandToRecipe converter;
 
+    @Mock
+    private CategoryService categoryService;
 
     @Before
     public void setUp() throws Exception {
+
+        MockitoAnnotations.initMocks(this);
+
         converter = new RecipeCommandToRecipe(new CategoryCommandToCategory(),
                 new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
-                new NotesCommandToNotes());
+                new NotesCommandToNotes(),
+                categoryService
+                );
 
-       // System.out.println("### --- "+converter.convert());
+        Category category = new Category();
+        category.setId(CAT_ID_1);
+        Category category2 = new Category();
+        category2.setId(CAT_ID2);
+        HashSet<Category> categories = new HashSet<>();
+        categories.add(category);
+        categories.add(category2);
+
+        when(categoryService.getAllCategoryByIds(any())).thenReturn(categories);
     }
 
     @Test
@@ -74,8 +97,8 @@ public class RecipeCommandToRecipeTest {
         CategoryCommand category2 = new CategoryCommand();
         category2.setId(CAT_ID2);
 
-        recipeCommand.getCategories().add(category);
-        recipeCommand.getCategories().add(category2);
+        recipeCommand.getCheckedCategories().add(category.getId());
+        recipeCommand.getCheckedCategories().add(category2.getId());
 
         IngredientCommand ingredient = new IngredientCommand();
         ingredient.setId(INGRED_ID_1);

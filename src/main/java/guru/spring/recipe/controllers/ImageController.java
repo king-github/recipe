@@ -52,7 +52,7 @@ public class ImageController {
         response.setContentType("image/jpeg");
 
         InputStream is = (recipe.getImage() != null) ?
-                new ByteArrayInputStream(recipe.getImage()) :
+                new ByteArrayInputStream(recipe.getImage().getImageData()) :
                 new FileInputStream(new ClassPathResource("/static/images/default.jpg").getFile());
 
 

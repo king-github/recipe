@@ -109,7 +109,10 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
             .addIngredient(new Ingredient("ripe tomato, seeds and pulp removed, chopped", new BigDecimal(".5"), getUom("Each")));
 
 
-        guacRecipe.setImage(loadImage("/static/images/guacamole400x400.jpg"));
+        Image guacImage = new Image();
+        guacImage.setImageData(loadImage("/static/images/guacamole400x400.jpg"));
+        guacImage.setRecipe(guacRecipe);
+        guacRecipe.setImage(guacImage);
 
         recipes.add(guacRecipe);
 
@@ -174,7 +177,10 @@ public class RecipeBootsrap implements ApplicationListener<ContextRefreshedEvent
         tacosRecipe.getCategories().add(getCategory("American"));
         tacosRecipe.getCategories().add(getCategory("Fast Food"));
 
-        tacosRecipe.setImage(loadImage("/static/images/tacos400x400.jpg"));
+        Image tacosImage = new Image();
+        tacosImage.setImageData(loadImage("/static/images/tacos400x400.jpg"));
+        tacosImage.setRecipe(tacosRecipe);
+        tacosRecipe.setImage(tacosImage);
 
         recipes.add(tacosRecipe);
 

@@ -33,13 +33,13 @@ public class Recipe {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
-    @Lob
-    private byte[] image;
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Image image;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Notes notes;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "recipe")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private List<Ingredient> ingredients = new ArrayList<>();
 
     @ManyToMany

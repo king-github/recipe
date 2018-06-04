@@ -28,7 +28,7 @@ public class ImageServiceImpl implements ImageService {
                 .orElseThrow(RECIPE_NOT_FOUND_EXCEPTION);
 
         try {
-            recipe.setImage(file.getBytes());
+            recipe.getImage().setImageData(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

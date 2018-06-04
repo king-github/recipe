@@ -1,5 +1,6 @@
 package guru.spring.recipe.controllers;
 
+import guru.spring.recipe.commands.CategoryCommand;
 import guru.spring.recipe.commands.RecipeCommand;
 import guru.spring.recipe.exceptions.ResourceNotFoundException;
 import guru.spring.recipe.services.CategoryService;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -56,6 +58,7 @@ public class RecipeController {
 
     @GetMapping("/{id}/update")
     public String updateRecipe(@PathVariable Long id, Model model){
+
         model.addAttribute("recipe", recipeService.findCommandById(id));
         model.addAttribute("categories", categoryService.getAllCategoryCommand());
 
@@ -64,12 +67,12 @@ public class RecipeController {
 
     @PostMapping("")
     public String saveOrUpdate(@Valid @ModelAttribute("recipe")  RecipeCommand command,
-                               BindingResult bindingResult){
+                               BindingResult bindingResult, Model model){
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategoryCommand());
             return "recipe/recipeform";
         }
-
 
         RecipeCommand savedCommand = recipeService.save(command);
 

@@ -1,8 +1,6 @@
 package guru.spring.recipe.model;
 
-
 import lombok.*;
-import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 
@@ -10,17 +8,19 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
+@ToString(of = {"id", "description"})
 @Entity
-public class Notes {
+public class Image {
+
 
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Lob
+    private byte[] imageData;
+
     @OneToOne
-    @MapsId
     private Recipe recipe;
 
-    @Lob
-    private String recipeNotes;
 }

@@ -32,7 +32,8 @@ public class RecipeToRecipeCommandTest {
         converter = new RecipeToRecipeCommand(
                 new CategoryToCategoryCommand(),
                 new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
-                new NotesToNotesCommand());
+                new NotesToNotesCommand(),
+                new ImageToImageCommand());
     }
 
     @Test
@@ -97,7 +98,7 @@ public class RecipeToRecipeCommandTest {
         assertEquals(SOURCE, command.getSource());
         assertEquals(URL, command.getUrl());
         assertEquals(NOTES_ID, command.getNotes().getId());
-        assertEquals(2, command.getCategories().size());
+        assertEquals(2, command.getCheckedCategories().size());
         assertEquals(2, command.getIngredients().size());
 
     }
